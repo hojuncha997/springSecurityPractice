@@ -1,0 +1,112 @@
+
+//querydsl 버전정보 추가####
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
+
+plugins {
+    id 'org.springframework.boot' version '2.7.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' //querydsl 플러그인 추가####
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {//괄호 넣어줌
+        //아래에 mariadb관련 jdbc 드라이버 추가. jpa 관련 설정 추가, thymeleaf에서 쓸 java8 날짜 라이브러리 추가
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.springframework.security:spring-security-test'
+
+
+//    compile, runtime, testCompile, testRuntime 은 Gradle 4.10 (2018.8.27) 이래로
+//    deprecate 되었다. 그리고 Gradle 7.0 (2021.4.9) 부터 삭제되었다.
+//    삭제된 네 명령은 각각 implementation, runtimeOnly, testImplementation, testRuntimeOnly 으로 대체되었다.
+//    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client'
+//    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time'
+//    아래와 같이 써준다.
+    implementation('org.thymeleaf.extras:thymeleaf-extras-java8time')
+    implementation('org.mariadb.jdbc:mariadb-java-client')
+    implementation('org.thymeleaf.extras:thymeleaf-extras-java8time')
+    compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
+
+    // ' : ' 콜론을 띄어 쓰며 오류남.
+
+//    implementation 'com.querydsl:querydsl-jpa'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}" //querydsl 의존성 추가####
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+//querydsl 추가 시작####
+
+// querydsl에서 사용할 경로 설정
+def querydslDir = "$buildDir/generated/querydsl"
+
+// JPA 사용 여부와 사용할 경로를 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+// build 시 사용할 sourceSet 추가
+sourceSets{
+    main.java.srcDir querydslDir
+}
+
+// querydsl 컴파일시 사용할 옵션 설정
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+    //build.gradle을 갱신하면 여기가 실행가능한 task가 됨.
+}
+
+// querydsl 이 compileClassPath 를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+
+
+
+
+
+
+
+
+
