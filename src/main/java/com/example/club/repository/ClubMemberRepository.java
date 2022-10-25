@@ -8,12 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, String> {
-//ClubMemberTests.java
 
     @EntityGraph(attributePaths = {"roleSet"}, type = EntityGraph.EntityGraphType.LOAD)
-
-    @Query("select m from ClubMember m where m.fromSocial =:social and m.email =:email")
-
+    @Query("select m from ClubMember m where m.fromSocial = :social and m.email =:email")
     Optional<ClubMember> findByEmail(String email, boolean social);
-
 }
+

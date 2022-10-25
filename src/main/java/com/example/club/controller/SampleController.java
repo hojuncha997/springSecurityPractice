@@ -1,6 +1,8 @@
 package com.example.club.controller;
 
+import com.example.club.security.dto.ClubAuthMemberDTO;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +18,11 @@ public class SampleController {
     }
 
     @GetMapping("/member")
-    public void exMember(){
+    //컨트롤러에서 로그인된 사용자 정보를 확인하기 위해 파라미터와 어노테이션 사용
+    public void exMember(@AuthenticationPrincipal ClubAuthMemberDTO clubAuthMemberDTO){
         log.info("exMember...");
+        log.info("---------------------------");
+        log.info(clubAuthMemberDTO);
     }
 
     @GetMapping("/admin")

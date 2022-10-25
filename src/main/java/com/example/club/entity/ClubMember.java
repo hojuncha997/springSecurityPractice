@@ -28,8 +28,8 @@ public class ClubMember extends BaseEntity {
     private boolean fromSocial;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @Builder.Default
-    private Set<ClubMemberRole> roleSet = new HashSet<>();//    //ClubMemberRole 타입값을 처리하기 위해 Set<ClubMemberRole> 추가
+//    @Builder.Default
+    private Set<ClubMemberRole> roleSet; // = new HashSet<>();//    //ClubMemberRole 타입값을 처리하기 위해 Set<ClubMemberRole> 추가
 
 
     public void addMemberRole(ClubMemberRole clubMemberRole){

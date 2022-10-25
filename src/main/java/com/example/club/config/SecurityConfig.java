@@ -34,13 +34,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        //사용자 계정은 user1
-        auth.inMemoryAuthentication().withUser("user1")
-                .password("$2a$10$rAWXDLrGuOHQzDS7gU7OOu6gMxJN5bJX5ySPAKjcc0qv9cS9Mnt1O")
-                .roles("USER");
-    }
+//@Service //자동으로 스프링에 빈 등록 -> 자동으로 UserDetailService로 인식한다. 따라서 임시 configure()를 사용하지 않도록 한다.
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+//        //사용자 계정은 user1
+//        auth.inMemoryAuthentication().withUser("user1")
+//                .password("$2a$10$rAWXDLrGuOHQzDS7gU7OOu6gMxJN5bJX5ySPAKjcc0qv9cS9Mnt1O")
+//                .roles("USER");
+//    }
 
 }
